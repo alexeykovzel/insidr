@@ -10,5 +10,4 @@ public class InsidrApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(InsidrApplication.class, args);
 	}
-
 }
