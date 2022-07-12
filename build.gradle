@@ -19,20 +19,21 @@ repositories {
 }
 
 dependencies {
-	/* Web */
+
+	/* Spring */
 	implementation 'org.springframework.boot:spring-boot-starter-web'
-
-	/* Database */
+	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+	// implementation 'org.springframework.boot:spring-boot-starter-security'
 	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-	runtimeOnly 'org.postgresql:postgresql'
-
-	/* Testing */
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
 	/* Other */
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	annotationProcessor 'org.projectlombok:lombok'
 	compileOnly 'org.projectlombok:lombok'
+	runtimeOnly 'org.postgresql:postgresql'
+	testImplementation 'com.h2database:h2:2.1.212'
+
 }
 
 tasks.named('test') {
