@@ -1,0 +1,75 @@
+/**
+    =================================
+                 GLOBAL
+    =================================
+ */
+
+:root {
+    --light-blue: #72F7FF;
+    --small-border: #aaa 1px solid;
+    --small-shadow: 2px 2px 10px #ccc;
+}
+
+html {
+    scroll-behavior: smooth;
+    font-size: 62.5%;
+    height: 100%;
+}
+
+ul {
+    list-style: none;
+}
+
+button,
+li {
+    cursor: pointer;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background: white;
+    font-size: 1.6rem;
+    height: 100%;
+}
+
+/* Removes default margin and define font */
+body,
+h1,
+h2,
+h3,
+h4,
+p,
+ul,
+button,
+input,
+label {
+    font-family: 'DM Sans', sans-serif !important;
+    margin: 0;
+}
+
+/**
+    =================================
+                COMPONENT
+    =================================
+ */
+
+ /* header with navigation */
+.nav {
+    display: flex;
+    align-items: center;
+    background: black;
+    height: 4.5em;
+    gap: 3.5em;
+}
+
+.nav li {
+    color: white;
+    font-weight: bold;
+    font-size: 2rem;
+}
+
+.nav li:active,
+li:hover {
+    color: var(--light-blue);
+}

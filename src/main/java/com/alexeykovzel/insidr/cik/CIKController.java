@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequestMapping("/edgar")
 public class CIKController {
     private final CIKDataService cikService;
 
@@ -21,5 +22,10 @@ public class CIKController {
     public List<CentralIndexKey> getIndexes(@RequestParam(name = "from", defaultValue = "0") int from,
                                             @RequestParam(name = "to") int to) {
         return cikService.getIndexes(from, to);
+    }
+
+    @GetMapping("/ids")
+    public List<String> getIds() {
+        return null;
     }
 }

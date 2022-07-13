@@ -4,10 +4,34 @@
 <head>
     <meta charset="UTF-8">
     <title>Test page</title>
+    <link rel="stylesheet" href="../static/global.css">
+    <link rel="stylesheet" href="../static/index.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="../static/search.js"></script>
+    <script src="../static/invest.js"></script>
 </head>
 
 <body>
-<h1>Hi mom</h1>
+    <ul class="nav">
+        <li>Home</li>
+        <li>Companies</li>
+    </ul>
+
+    <div class="center">
+        <div class="logo">
+            <h1>Insidr</h1>
+            <object type="image/svg+xml" data="../static/images/dollar.svg"></object>
+        </div>
+        <div class="search autocomplete">
+            <object type="image/svg+xml" class="search-icon" data="../static/images/search.svg"></object>
+            <label for="search"></label><input id="search" type="text" placeholder="Type company name / symbol">
+        </div>
+    </div>
 </body>
+
+<script>
+    let countries = ["New York", "New Man", "New ehifuiefhseuf", "Los Angeles"];
+    autocomplete(document.getElementById("search"), countries);
+</script>
 
 </html>
