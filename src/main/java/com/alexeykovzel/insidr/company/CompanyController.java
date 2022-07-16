@@ -6,16 +6,16 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/edgar")
-public class EdgarController {
+@RequestMapping("/companies")
+public class CompanyController {
     private final CompanyRepository companyRepository;
 
     @Autowired
-    public EdgarController(CompanyRepository companyRepository) {
+    public CompanyController(CompanyRepository companyRepository) {
         this.companyRepository = companyRepository;
     }
 
-    @GetMapping("/companies")
+    @GetMapping
     public List<Company> getAllCompanies() {
         return companyRepository.findAll();
     }

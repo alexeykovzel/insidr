@@ -7,25 +7,26 @@ import java.util.List;
 
 @Entity
 @Table(name = "company")
-
+@AllArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
-@NoArgsConstructor
 @ToString
 public class Company {
 
     @Id
+    @Column(name = "cik")
     private String cik;
+
+    @Column(name = "title")
+    private String title;
 
     @Column(name = "symbol")
     private String symbol;
 
-    @ElementCollection
-    @CollectionTable(name="company_names")
-    private List<String> names;
+    @Column(name = "description")
+    private String description;
 
-    public Company(String cik, List<String> names) {
-        this.cik = cik;
-        this.names = names;
-    }
+    @Column(name = "exchange")
+    private String exchange;
 }

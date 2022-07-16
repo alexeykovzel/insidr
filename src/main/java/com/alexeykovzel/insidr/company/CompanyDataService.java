@@ -1,24 +1,19 @@
 package com.alexeykovzel.insidr.company;
 
-import org.apache.tomcat.util.http.fileupload.IOUtils;
+import com.alexeykovzel.insidr.DataService;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.io.*;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
+import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Component
-public class CompanyDataService {
-    private final static String URL = "https://www.sec.gov/Archives/edgar/cik-lookup-data.txt";
+public class CompanyDataService extends DataService {
+    private final static String COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers_exchange.json";
     private final CompanyRepository companyRepository;
 
     @Autowired
@@ -29,7 +24,7 @@ public class CompanyDataService {
     @PostConstruct
     public void init() {
         if (companyRepository.count() == 0) {
-            System.out.println("Retrieving company data...");
+            System.out.print("Retrieving company data... ");
             double t1 = System.currentTimeMillis();
             companyRepository.saveAll(getAllCompanies());
             double t2 = System.currentTimeMillis();
@@ -39,41 +34,19 @@ public class CompanyDataService {
 
     public List<Company> getAllCompanies() {
         List<Company> companies = new ArrayList<>();
-        Map<String, List<String>> indexes = new HashMap<>();
-        try (BufferedReader in = new BufferedReader(new InputStreamReader(getIndexStream()))) {
-            String line;
-            while ((line = in.readLine()) != null) {
-                int cikIdx = line.indexOf(":");
-                String index = line.substring(cikIdx + 1, line.length() - 1);
-                String company = line.substring(0, cikIdx);
-                if (!indexes.containsKey(index)) indexes.put(index, new ArrayList<>());
-                indexes.get(index).add(company);
-            }
-            for (Map.Entry<String, List<String>> index : indexes.entrySet()) {
-                companies.add(new Company(index.getKey(), index.getValue()));
+        try {
+            JsonNode root = new ObjectMapper().readTree(getDataStream(COMPANY_TICKERS_URL));
+            JsonNode items = root.get("data");
+            for (JsonNode item : items) {
+                String cik = item.get(0).asText();
+                String title = item.get(1).asText();
+                String symbol = item.get(2).asText();
+                String exchange = item.get(3).asText();
+                companies.add(new Company(cik, title, symbol, null, exchange));
             }
         } catch (IOException e) {
-            System.out.println("[ERROR] Failed to read indexes");
+            System.out.println("[ERROR] Could not access company data");
         }
         return companies;
-    }
-
-    public void saveIndexesToFile(String filepath) {
-        try (OutputStream out = new FileOutputStream(filepath)) {
-            IOUtils.copy(getIndexStream(), out);
-        } catch (IOException e) {
-            System.out.println("[ERROR] Failed to save CIK data to file");
-        }
-    }
-
-    public InputStream getIndexStream() {
-        try {
-            HttpClient client = HttpClient.newHttpClient();
-            HttpRequest request = HttpRequest.newBuilder(URI.create(URL)).build();
-            return client.send(request, HttpResponse.BodyHandlers.ofInputStream()).body();
-        } catch (IOException | InterruptedException e) {
-            System.out.println("[ERROR] Failed to access CIK data");
-            return null;
-        }
     }
 }
