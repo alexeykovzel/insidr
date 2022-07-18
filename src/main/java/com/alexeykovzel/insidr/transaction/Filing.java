@@ -1,4 +1,4 @@
-package com.alexeykovzel.insidr.filing;
+package com.alexeykovzel.insidr.transaction;
 
 import lombok.*;
 
@@ -15,15 +15,15 @@ import java.util.Date;
 @Getter
 @Setter
 @ToString
-public class SECFiling {
+public class Filing {
 
     @Id
     @Column(name = "accession_no")
-    private String id;
+    private String accessionNo;
 
-    @Column(name = "filing_date")
-    private Date filingDate;
+    @Column(name = "company_cik")
+    private String companyCik;
 
-    @Column(name = "report_date")
-    private Date reportDate;
+    @Column(name = "date")
+    private Date date;
 }

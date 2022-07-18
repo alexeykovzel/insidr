@@ -1,6 +1,7 @@
 package com.alexeykovzel.insidr.company;
 
-import com.alexeykovzel.insidr.DataService;
+import com.alexeykovzel.insidr.utils.DataService;
+import com.alexeykovzel.insidr.utils.ProgressBar;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,11 +25,9 @@ public class CompanyDataService extends DataService {
     @PostConstruct
     public void init() {
         if (companyRepository.count() == 0) {
-            System.out.print("Retrieving company data... ");
-            double t1 = System.currentTimeMillis();
+            ProgressBar bar = new ProgressBar("Retrieving company data...", 1);
             companyRepository.saveAll(getAllCompanies());
-            double t2 = System.currentTimeMillis();
-            System.out.printf("Time spent: %.2f seconds\n", (t2 - t1) / 1000);
+            bar.update(1);
         }
     }
 

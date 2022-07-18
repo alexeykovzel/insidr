@@ -1,4 +1,4 @@
-package com.alexeykovzel.insidr;
+package com.alexeykovzel.insidr.utils;
 
 import java.io.IOException;
 import java.io.InputStream;
