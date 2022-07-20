@@ -2,13 +2,11 @@ package com.alexeykovzel.insidr.insider;
 
 import lombok.*;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
-@Table(name = "insider")
+@Table(name = "insiders")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -26,6 +24,7 @@ public class Insider {
     @Column(name = "company_cik")
     private String companyCik;
 
-    @Column(name = "relationship")
-    private String relationship;
+    @ElementCollection
+    @CollectionTable(name="relationships")
+    private List<String> relationship;
 }

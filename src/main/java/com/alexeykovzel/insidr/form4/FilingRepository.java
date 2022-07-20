@@ -1,4 +1,4 @@
-package com.alexeykovzel.insidr.transaction;
+package com.alexeykovzel.insidr.form4;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 

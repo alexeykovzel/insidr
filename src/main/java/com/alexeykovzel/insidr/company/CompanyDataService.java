@@ -41,7 +41,7 @@ public class CompanyDataService extends DataService {
                 String title = item.get(1).asText();
                 String symbol = item.get(2).asText();
                 String exchange = item.get(3).asText();
-                companies.add(new Company(cik, title, symbol, null, exchange));
+                companies.add(new Company(cik, title, symbol, exchange));
             }
         } catch (IOException e) {
             System.out.println("[ERROR] Could not access company data");

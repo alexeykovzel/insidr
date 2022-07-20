@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "company")
+@Table(name = "companies")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -23,9 +23,6 @@ public class Company {
 
     @Column(name = "symbol")
     private String symbol;
-
-    @Column(name = "description")
-    private String description;
 
     @Column(name = "exchange")
     private String exchange;

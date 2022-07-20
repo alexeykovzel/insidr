@@ -1,4 +1,4 @@
-package com.alexeykovzel.insidr.transaction;
+package com.alexeykovzel.insidr.form4;
 
 import lombok.*;
 
@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "transaction")
+@Table(name = "transactions")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -19,8 +19,8 @@ public class Transaction {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
-    @Column(name = "filing_id")
-    private String filingId;
+    @Column(name = "accession_no")
+    private String accessionNo;
 
     @Column(name = "insider_cik")
     private String insiderCik;

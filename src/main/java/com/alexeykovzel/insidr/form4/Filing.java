@@ -1,4 +1,4 @@
-package com.alexeykovzel.insidr.transaction;
+package com.alexeykovzel.insidr.form4;
 
 import lombok.*;
 
@@ -9,11 +9,12 @@ import javax.persistence.Table;
 import java.util.Date;
 
 @Entity
-@Table(name = "filing")
+@Table(name = "filings")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Builder
 @ToString
 public class Filing {
 
