@@ -13,7 +13,7 @@ public class ProgressBar {
     }
 
     public void update(double current) {
-        double share = current / total;
+        double share = (total != 0) ? current / total : 1;
         int nums = (int) Math.round(BAR_SIZE * share);
         String signs = "#".repeat(nums) + " ".repeat(BAR_SIZE - nums);
         System.out.printf(text + "[%s] %d%%\r", signs, Math.round(share * 100));

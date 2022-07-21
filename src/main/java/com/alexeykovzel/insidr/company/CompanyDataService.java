@@ -1,9 +1,8 @@
 package com.alexeykovzel.insidr.company;
 
-import com.alexeykovzel.insidr.utils.DataService;
+import com.alexeykovzel.insidr.utils.EdgarDataService;
 import com.alexeykovzel.insidr.utils.ProgressBar;
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -13,8 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Component
-public class CompanyDataService extends DataService {
-    private final static String COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers_exchange.json";
+public class CompanyDataService extends EdgarDataService {
     private final CompanyRepository companyRepository;
 
     @Autowired
@@ -24,27 +22,26 @@ public class CompanyDataService extends DataService {
 
     @PostConstruct
     public void init() {
+        ProgressBar bar = new ProgressBar("Initialing company data...", 1);
         if (companyRepository.count() == 0) {
-            ProgressBar bar = new ProgressBar("Retrieving company data...", 1);
             companyRepository.saveAll(getAllCompanies());
-            bar.update(1);
         }
+        bar.update(1);
     }
 
     public List<Company> getAllCompanies() {
         List<Company> companies = new ArrayList<>();
         try {
-            JsonNode root = new ObjectMapper().readTree(getDataStream(COMPANY_TICKERS_URL));
-            JsonNode items = root.get("data");
+            JsonNode items = getJsonByUrl(COMPANY_TICKERS_URL).get("data");
             for (JsonNode item : items) {
-                String cik = item.get(0).asText();
+                String cik = addLeadingZeros(item.get(0).asText(), 10);
                 String title = item.get(1).asText();
                 String symbol = item.get(2).asText();
                 String exchange = item.get(3).asText();
                 companies.add(new Company(cik, title, symbol, exchange));
             }
-        } catch (IOException e) {
-            System.out.println("[ERROR] Could not access company data");
+        } catch (IOException | NullPointerException e) {
+            System.out.println("[ERROR] Could not access company data: " + e.getMessage());
         }
         return companies;
     }
