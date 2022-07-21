@@ -1,6 +1,6 @@
 package com.alexeykovzel.insidr.company;
 
-import com.alexeykovzel.insidr.utils.EdgarDataService;
+import com.alexeykovzel.insidr.EdgarDataService;
 import com.alexeykovzel.insidr.utils.ProgressBar;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +22,24 @@ public class CompanyDataService extends EdgarDataService {
 
     @PostConstruct
     public void init() {
-        ProgressBar bar = new ProgressBar("Initialing company data...", 1);
+        ProgressBar bar = new ProgressBar("Retrieving company data...", 1);
+        saveCompanyBySymbol("INTC");
+        bar.update(1);
+    }
+
+    private void saveCompanyBySymbol(String symbol) {
+        List<Company> companies = getAllCompanies();
+        for (Company company : companies) {
+            if (company.getSymbol().equals(symbol)) {
+                companyRepository.save(company);
+            }
+        }
+    }
+
+    private void saveCompaniesIfNone() {
         if (companyRepository.count() == 0) {
             companyRepository.saveAll(getAllCompanies());
         }
-        bar.update(1);
     }
 
     public List<Company> getAllCompanies() {
@@ -41,7 +54,7 @@ public class CompanyDataService extends EdgarDataService {
                 companies.add(new Company(cik, title, symbol, exchange));
             }
         } catch (IOException | NullPointerException e) {
-            System.out.println("[ERROR] Could not access company data: " + e.getMessage());
+            System.out.println("[ERROR] Could not retrieve company tickers: " + e.getMessage());
         }
         return companies;
     }

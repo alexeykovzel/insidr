@@ -3,6 +3,7 @@ package com.alexeykovzel.insidr.utils;
 public class ProgressBar {
     private static final int TEXT_SIZE = 40;
     private static final int BAR_SIZE = 20;
+
     private final String text;
     private final double total;
 
