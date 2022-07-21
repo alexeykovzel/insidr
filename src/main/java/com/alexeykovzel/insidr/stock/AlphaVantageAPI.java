@@ -3,6 +3,8 @@ package com.alexeykovzel.insidr.stock;
 import com.alexeykovzel.insidr.utils.DateUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -17,11 +19,16 @@ import java.util.Iterator;
 import java.util.List;
 
 @Service
+@PropertySource("classpath:api.properties")
 public class AlphaVantageAPI {
     private static final String HOST_URL = "https://alpha-vantage.p.rapidapi.com";
-    private static final String STOCK_PRICES_URL = HOST_URL + "/query?function=%s&symbol=%s&datatype=json";
-    private static final String RAPID_API_KEY = "3ceb078ca1mshc8e01fecbe71ffcp1a7cd1jsn0f938e080971";
-    private static final String RAPID_API_HOST = "alpha-vantage.p.rapidapi.com";
+    private static final String FUNCTION_URL = HOST_URL + "/query?function=%s&symbol=%s&datatype=%s";
+
+    @Value("${rapid.api.key}")
+    private String rapidApiKey;
+
+    @Value("${rapid.api.host}")
+    private String rapidApiHost;
 
     public List<StockPrice> getStockPrices(String symbol) {
         List<StockPrice> stockPrices = new ArrayList<>();
@@ -46,9 +53,9 @@ public class AlphaVantageAPI {
     private JsonNode getTimeSeriesBySymbol(String symbol) {
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(String.format(STOCK_PRICES_URL, "TIME_SERIES_WEEKLY_ADJUSTED", symbol)))
-                .header("X-RapidAPI-Key", RAPID_API_KEY)
-                .header("X-RapidAPI-Host", RAPID_API_HOST)
+                .uri(URI.create(String.format(FUNCTION_URL, "TIME_SERIES_WEEKLY_ADJUSTED", symbol, "json")))
+                .header("X-RapidAPI-Key", rapidApiKey)
+                .header("X-RapidAPI-Host", rapidApiHost)
                 .build();
         try {
             InputStream in = client.send(request, HttpResponse.BodyHandlers.ofInputStream()).body();
